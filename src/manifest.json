@@ -1,0 +1,35 @@
+{
+  "name": "Crux",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Powerup for Fantastic Fiction",
+  "icons": {
+    "16": "icons/icon.png"
+  },
+  "browser_action": {
+    "default_icon": "icons/icon.png",
+    "default_title": "browser action demo",
+    "default_popup": "src/browser_action/browser_action.html"
+  },
+  "content_scripts": [
+      {
+        "matches": [ "https://www.fantasticfiction.com/*", "http://www.fantasticfiction.com/*"],
+        "js": ["js/jquery.js", "js/instablurb.js"],
+        "css": ["css/popover.css", "css/fonts.css"]
+      }
+    ],
+  "web_accessible_resources": [
+    "popover.html", "fonts/*"
+  ],
+  "browser_action": {
+        "default_icon": {                    // optional
+          "16": "icons/icon.png"           // optional
+        },
+        "default_title": "Crux",      // optional; shown in tooltip
+        "default_popup": "popup.html"        // optional
+    },
+  "permissions": [
+    "tabs",
+    "webNavigation"
+  ]
+}
