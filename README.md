@@ -10,5 +10,11 @@ To develop the app, simply [enable developer mode](https://developer.chrome.com/
 ### Build
 Instructions coming soon...
 
+### Todo List
+1. Enable Insta-Blurb for Non-Author general books (like recomended etc.)
+2. Add ads in the InstaBlurb
+3. Add Loading GIF
+4. 
+
 ### Contact
 Questions, suggestions, or comments? Contant me at forumulator@gmail.com.

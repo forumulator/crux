@@ -4,7 +4,7 @@ $(document).ready(function () {
 	    $($.parseHTML(data)).appendTo('body');
 	});
 
-	var GENRE = "Genre", brLen = 11, maxShort = 300,
+	var GENRE = "Genre", FF_BOOK = "/c/", brLen = 11, maxShort = 300,
 	moreText = "   ...more", lessText = "(less)";
 
 	function attachMoreToggleHandler($moreToggle) {
@@ -64,10 +64,10 @@ $(document).ready(function () {
 		return title;
 	}
 
-	function getAuthor($ib) {
-		var $authDiv = $(".ff h1[itemprop='name']");
+	function getAuthor($html) {
+		var $authDiv = $html.find("span[itemprop='author']");
 		if ($authDiv.length) {
-			return $authDiv.text();
+			return $authDiv.find("a").text();
 		}
 		else return "";
 	}
@@ -81,7 +81,7 @@ $(document).ready(function () {
 				success: function (data) {
 					var $html = $($.parseHTML(data));
 					var name = getTitle($html), blurb = getBlurb($html), 
-					author = getAuthor($ib);
+					author = getAuthor($html);
 
 					$ib.find(".popover-title .name").text(name);
 					$ib.find(".popover-title .author").text(author);
@@ -97,35 +97,60 @@ $(document).ready(function () {
 		return retValue;
 	}
 
-	function InstaBlurb () {
-		console.log("Attaching insta-blurb handlers...");
-		$(".ff .sectionright a")
-		.on("mouseover", function () {
+	function isBookCover($a) {
+		if ($a == undefined) {
+			return false;
+		}
+		else if ($a.parent().hasClass("sectionright")) {
+			return true;
+		}
+		else {
+			var re = new RegExp("^\/[a-z]\/$");
+			if ($a.children("img").length > 0 && 
+				re.test($a.attr("href").slice(0, 3))) {
+				return true;
+			}
+			else {
+				return false;
+			}			
+		}
+	}
+
+	function attachInstaBlurbHandler($div) {
+		var $activeBlurb;
+		$div.css({"position": "relative"});
+		$div.on("mouseover", function () {
 			console.log("On mouseover");
 			if ($(this).children(".insta-blurb").length == 0) {
 				var $sample = $(".popover.sample").eq(0);
 				$(this).append($sample.clone().
 					removeClass("sample").addClass("insta-blurb"));
 			}
+			if ($activeBlurb != undefined)
+				$activeBlurb.hide();			
 			var $ib = $(this).children(".insta-blurb").eq(0),
 			url = $(this).attr("href");
 			$ib.fadeIn("fast");
+			$activeBlurb = $ib;
 			if (!fillBlurb($ib, url)) {
 				return false;
 			}
 		}).on("mouseleave", function () {
 			console.log("mouseleave");
 			var $ib = $(this).children(".insta-blurb").eq(0);
-			$ib.hide();
+			$ib.fadeOut();
 		});
 	}
 
-	function setImagesRelative () {
-		$(".sectionright > a").css({"position": "relative"});
-		return true;
+	function InstaBlurb() {
+		console.log("Attaching insta-blurb handlers...");
+		$("a").each(function() {
+			if (isBookCover($(this))) {
+				attachInstaBlurbHandler($(this));
+			}
+		});
 	}
 
-	setImagesRelative();
 	InstaBlurb();
 
 });
