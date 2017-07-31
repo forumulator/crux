@@ -8,6 +8,7 @@ $(document).ready(function () {
 	moreText = "   ...more", lessText = "(less)";
 
 	function attachMoreToggleHandler($moreToggle) {
+		$moreToggle.show();
 		var $par = $moreToggle.parent(), 
 		$more = $par.children(".more-content");
 		$moreToggle.click(function(event) {
@@ -45,7 +46,6 @@ $(document).ready(function () {
 		if (bMore !== "") {
 			$div.find(".popover-content .more-content").html(bMore);
 			$div.find(".more-toggle").each(function () {
-				$(this).show();
 				attachMoreToggleHandler($(this));
 			});
 		}
@@ -64,7 +64,7 @@ $(document).ready(function () {
 		return title;
 	}
 
-	function getAuthor() {
+	function getAuthor($ib) {
 		var $authDiv = $(".ff h1[itemprop='name']");
 		if ($authDiv.length) {
 			return $authDiv.text();
@@ -81,13 +81,15 @@ $(document).ready(function () {
 				success: function (data) {
 					var $html = $($.parseHTML(data));
 					var name = getTitle($html), blurb = getBlurb($html), 
-					author = getAuthor();
-					console.log(blurb);
+					author = getAuthor($ib);
+
 					$ib.find(".popover-title .name").text(name);
 					$ib.find(".popover-title .author").text(author);
+					
 					insertBlurb($ib, blurb);
 				},
 				error: function() {
+					console.log("Error fetching data from: " + url);
 					retValue = false;
 				}
 			});
@@ -96,7 +98,7 @@ $(document).ready(function () {
 	}
 
 	function InstaBlurb () {
-		console.log("Attaching handlers...");
+		console.log("Attaching insta-blurb handlers...");
 		$(".ff .sectionright a")
 		.on("mouseover", function () {
 			console.log("On mouseover");
@@ -107,14 +109,14 @@ $(document).ready(function () {
 			}
 			var $ib = $(this).children(".insta-blurb").eq(0),
 			url = $(this).attr("href");
+			$ib.fadeIn("fast");
 			if (!fillBlurb($ib, url)) {
 				return false;
 			}
-			$ib.fadeIn("fast");
 		}).on("mouseleave", function () {
 			console.log("mouseleave");
 			var $ib = $(this).children(".insta-blurb").eq(0);
-			$ib.fadeOut();
+			$ib.hide();
 		});
 	}
 
