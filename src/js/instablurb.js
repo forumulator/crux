@@ -133,8 +133,8 @@ $(document).ready(function () {
 				$(this).append($sample.clone().
 					removeClass("sample").addClass("insta-blurb"));
 			}
-			if ($activeBlurb != undefined)
-				$activeBlurb.hide();			
+			// if ($activeBlurb != undefined)
+			// 	$activeBlurb.hide();			
 			var $ib = $(this).children(".insta-blurb").eq(0),
 			url = $(this).attr("href");
 			$ib.fadeIn("fast");
