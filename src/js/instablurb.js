@@ -1,7 +1,8 @@
 $(document).ready(function () {
 	console.log("Document ready");
 	$.get(chrome.extension.getURL('/popover.html'), function(data) {
-	    $($.parseHTML(data)).appendTo('body');
+	    $($.parseHTML(data)).appendTo('body')
+	    .find(".loading-gif img").attr("src", chrome.extension.getURL("/images/loading.gif"));
 	});
 
 	var GENRE = "Genre", FF_BOOK = "/c/", brLen = 11, maxShort = 300,
@@ -78,6 +79,9 @@ $(document).ready(function () {
 			$.ajax({
 				url: url,
 				cache: true,
+				beforeSend: function () {
+					$ib.find(".loading-gif").show();
+				},
 				success: function (data) {
 					var $html = $($.parseHTML(data));
 					var name = getTitle($html), blurb = getBlurb($html), 
@@ -91,6 +95,9 @@ $(document).ready(function () {
 				error: function() {
 					console.log("Error fetching data from: " + url);
 					retValue = false;
+				},
+				complete: function() {
+					$ib.find(".loading-gif").hide();
 				}
 			});
 		}

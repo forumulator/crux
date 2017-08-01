@@ -14,7 +14,7 @@
       }
     ],
   "web_accessible_resources": [
-    "popover.html", "fonts/*"
+    "popover.html", "fonts/*", "images/*"
   ],
   "browser_action": {
         "default_icon": {                    // optional
